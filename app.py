@@ -3,7 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Change this for security
+import os
+app.secret_key = os.random(24)  # Secure random secret key
 
 # Configure SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -37,8 +38,8 @@ def taycan():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get['email']
+        password = request.form.get['password']
         user = User.query.filter_by(email=email).first()
 
         if user and check_password_hash(user.password, password):
@@ -54,8 +55,8 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get['email']
+        password = request.form.get['password']
 
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
